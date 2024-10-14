@@ -1,0 +1,81 @@
+{% block content %}
+
+<style>
+    .btn {
+        margin: 5px;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+    }
+    .btn-primary {
+        background-color: #007BFF;
+        color: white;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
+<div class="container mt-5">
+    <h1 class="text-center">Search Posts by Tags</h1>
+    
+    <form method="POST" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="query" class="form-control" placeholder="Enter tags to search..." required>
+            <button type="submit" class="btn-primary">Search</button>
+        </div>
+    </form>
+    
+    <ul class="list-group">
+        {% if results %}
+            {% for result in results %}
+                <li class="list-group-item">
+                    <a href="/post/{{ result['_id'] }}" class="text-decoration-none">
+                        <strong>{{ result['title'] }}</strong> - Tags: {{ result['tags'] }}
+                    </a>
+                </li>
+            {% else %}
+                <li class="list-group-item">No results found for your search.</li>
+            {% endfor %}
+        {% else %}
+            <li class="list-group-item">Start your search by entering tags above.</li>
+        {% endif %}
+    </ul>
+
+    {% if total_results > per_page %}
+        <nav aria-label="Search Results Pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page - 1 }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo; Previous</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo; Previous</span>
+                    </li>
+                {% endif %}
+                
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ page }}</span>
+                </li>
+                
+                {% if (page * per_page) < total_results %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page + 1 }}" aria-label="Next">
+                            <span aria-hidden="true">Next &raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Next &raquo;</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Home</a>
+</div>
+{% endblock %}

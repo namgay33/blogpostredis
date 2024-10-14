@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Redis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin-top: 1px;
+        }
+        .container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+        .post-card {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header {
+            background: #7ad0dc;
+            padding: 2px 0;
+        }
+        header h1 {
+            margin: 0 0 0 10px;
+            font-size: large;
+            font-family: fantasy;
+        }        
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: #000000;
+            margin: 0 15px;
+            transition: color 0.2s;
+            font-weight: bolder;
+            text-decoration: none;
+        }
+        nav a:hover {
+            color: #00796b;
+        }
+        .temporary-message {
+            transition: opacity 0.5s ease;
+        }
+        .btn-add-post {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            transition: background-color 0.3s, transform 0.2s;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .btn-add-post:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .btn-edit {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .btn-view {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+        .btn-edit:hover, .btn-delete:hover, .btn-view:hover {
+            opacity: 0.8;
+        }
+        @media (min-width: 768px) {
+            .post-card {
+                flex: 1 1 30%;
+                margin-right: 20px;
+                width: 10cm;
+            }
+        }
+        @media (max-width: 768px) {
+            .post-card {
+                width: 100%;
+            }
+        }
+        .post-cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .post-card h5 {
+            color: #ffffff;
+            margin-bottom: 10px;
+            background-color: #007BFF;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .post-card p {
+            color: #333333;
+            margin-bottom: 10px;
+        }
+        .post-card small {
+            color: #6c757d;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="text-center">Blog Your Posts</h1>
+        <nav class="mt-0">
+            <a href="{{ url_for('index') }}">Home</a>
+            <!-- <a href="{{ url_for('about') }}">About</a> -->
+            <a href="{{ url_for('contact') }}">Contact</a>
+            {% if current_user.is_authenticated %}
+                <!-- <a href="{{ url_for('profile') }}">Profile</a> -->
+                <p>Welcome, {{ current_user.username }} | <a href="{{ url_for('logout') }}" class="text-white">Logout</a></p>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+    <form class="form-inline my-2 my-lg-0" method="GET" action="{{ url_for('search') }}" style="margin-left: auto;">
+        <button class="btn btn-outline-success my-2 my-sm-0 btn-lg" type="submit" style="padding: 8px 30px; font-size: 1.2rem; margin-top:8px; border-radius:8px; background-color:#67d4d3";>
+            <i class="fas fa-search"></i> Search
+        </button>
+    </form>    
+    
+    <main class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div id="flash-messages">
+                    {% for message in messages %}
+                        <div class="alert alert-info temporary-message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <h2>Your Posts</h2>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('create') }}" class="btn-add-post mb-3">Add New Post</a>
+        {% endif %}
+        
+        <div class="post-cards-container">
+            {% if posts and posts|length > 0 %}
+                {% for post in posts %}
+                    <div class="post-card">
+                        <h5>{{ post.title }}</h5>
+                        <p><small>Tags: {{ post.tags }}</small></p>
+                        {% if post['image_path'] %}
+                            {% set image_path = post['image_path'] %}
+                            {% if not image_path.startswith('uploads/') %}
+                                {% set image_path = 'uploads/' ~ image_path %}
+                            {% endif %}
+                            <img src="{{ url_for('static', filename=image_path) }}" alt="{{ post.title }}" class="image-preview" style="width: 150px; height: auto;">
+                        {% else %}
+                            <p>No image found.</p>
+                        {% endif %}
+                        <br><br>
+                        <a href="{{ url_for('view_post', post_id=post['_id']) }}" class="btn btn-view btn-sm mt-2">View Full Post</a>
+                        {% if current_user.is_authenticated and post.user_id == current_user.id %}
+                            <a href="{{ url_for('edit', post_id=post['_id']) }}" class="btn btn-edit btn-sm">Edit</a>
+                            <form action="{{ url_for('delete', post_id=post['_id']) }}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                <button type="submit" class="btn btn-delete btn-sm">Delete</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    No posts available. Please add one.
+                </div>
+            {% endif %}
+        </div>
+        
+        
+    </main>
+    <footer class="footer">
+        <p>&copy; 2024 Blog Your Post</p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        setTimeout(function() {
+            const flashMessages = document.querySelectorAll('.temporary-message');
+            flashMessages.forEach((message) => {
+                message.style.opacity = '0';
+            });
+            setTimeout(() => {
+                flashMessages.forEach((message) => {
+                    message.remove();
+                });
+            }, 500);
+        }, 3000);
+    </script>
+</body>
+</html>

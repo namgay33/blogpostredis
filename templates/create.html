@@ -1,0 +1,136 @@
+{% block content %}
+<style>
+    body {
+        background-color: #f3f4f6;
+    }
+
+    h1 {
+        color: #2c3e50;
+        font-weight: bold;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: 50px auto;
+        background-color: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        font-weight: bold;
+        color: #34495e;
+    }
+
+    input[type="text"], textarea, input[type="file"] {
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 16px;
+        width: 100%;
+        background-color: #f9f9f9;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    textarea {
+        resize: vertical;
+        height: 150px;
+    }
+
+    input[type="file"] {
+        padding: 8px;
+        background-color: #fff;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        background-color: #2980b9;
+        border: none;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #1f618d;
+    }
+
+    .form-control:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+        border-color: #2980b9;
+    }
+
+    .formatted-content {
+        white-space: pre-wrap;
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+    .footer {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .btn-secondary {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        width: 100%;
+        padding: 10px 15px;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+        background-color: #c82333;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Create New Post/Note</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" class="form-control" required placeholder="Enter the title of your post/note" title="Title of your post or note">
+        </div>
+        
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea name="content" id="content" class="form-control" required placeholder="Write your note or post content here" title="Content of your post or note"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="tags">Tags:</label>
+            <input type="text" name="tags" id="tags" class="form-control" placeholder="Enter tags (comma-separated)" title="Tags for categorizing your post/note">
+        </div>
+
+        <div class="form-group">
+            <label for="image">Upload Image (Optional):</label>
+            <input type="file" name="image" id="image" class="form-control" accept="image/*" title="Upload an image for your post/note (optional)">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Create Post/Note</button>
+    </form>
+    <div class="footer">
+        <a href="{{ url_for('index') }}" class="btn-secondary btn-block mt-3">Cancel</a>
+    </div>
+
+    {% if post %}
+    <div class="formatted-content">
+        {{ post.content | safe }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

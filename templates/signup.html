@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="signup-container">
+    <div class="signup-card">
+        <h2>Sign Up</h2>
+        <form method="POST" onsubmit="return validatePasswords()">
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" required placeholder="Choose a username" title="Your username">
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" required placeholder="Choose a password" title="Your password">
+            </div>
+            <div class="input-group">
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" name="confirm_password" id="confirm_password" required placeholder="Confirm your password" title="Confirm password">
+            </div>
+            <button class="btn-signup" type="submit">Sign Up</button>
+        </form>
+        <p class="login-link">Already have an account? <a href="{{ url_for('login') }}">Log in here</a></p>
+    </div>
+</div>
+
+<script>
+    function validatePasswords() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm_password").value;
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return false;
+        }
+        return true;
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            font-size: 14px; /* Default body font size */
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 24px; /* Reduced font size for h1 */
+        }
+        .contact-info h3, .contact-info p {
+            color: #333;
+            font-size: 16px; /* Reduced font size for h3 and paragraphs */
+        }
+        .contact-info h4 {
+            font-size: 18px; /* Reduced font size for h4 */
+        }
+        .form-group label {
+            font-weight: bold;
+            font-size: 14px; /* Reduced font size for labels */
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        footer {
+            margin-top: 30px;
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 12px; /* Reduced font size for footer */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Contact Us</h1>
+        <div class="contact-info">
+            <h3>Contact Us for Any General Queries, Suggestions, Public Relations, Advertising, or Feedback</h3>
+            <p>Use the emails below or fill in the form, and we'll get in touch with you as soon as possible.</p>
+            
+            <h4>If you prefer email, you can also reach out directly to one of our teams:</h4>
+            <ul>
+                <li><strong>Leaks, Press Releases, and News Tips:</strong> news@blogyourpost.com</li>
+                <li><strong>Product Review Requests:</strong> sonam@blogyourpost.com</li>
+                <li><strong>Advertising & Sponsorship Opportunities:</strong> sales@blogyourpost.com</li>
+                <li><strong>Feedback & General Inquiries:</strong> contact@blogyourpost.com</li>
+            </ul>
+            
+            <h4>General Address</h4>
+            <p><strong>Blog Your Post</strong><br>
+            Wentworth, Australia<br>
+            Pin Code – 110062</p>
+            
+            <p><strong>Contact No.:</strong> 9411625113</p>
+            
+            <h4>The fastest way to get in touch with us...</h4>
+            <p>Email us at: <strong>blogyourpost@gmail.com</strong> or <strong>contact@blogyourpost.com</strong></p>
+        </div>
+
+        <h3>Feedback Form</h3>
+        <form action="submit_feedback" method="post">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Your Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Your Message</label>
+                <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Blog Your Post</p>
+    </footer>
+
+</body>
+</html>

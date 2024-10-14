@@ -1,0 +1,135 @@
+{% block content %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    h1 {
+        color: #00796b;
+        font-weight: 700;
+        margin-bottom: 2rem;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #00796b;
+        box-shadow: 0 0 5px rgba(0, 121, 107, 0.5);
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    button {
+        background-color: #00796b;
+        border: none;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #005b5b;
+    }
+
+    .image-preview {
+        max-width: 100%;
+        height: 200px;
+        margin-bottom: 1rem;
+        border-radius: 5px;
+        border: 1px solid hsl(0, 0%, 87%);
+    }
+
+    .footer {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .btn-secondary {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        width: 100%;
+        padding: 10px 15px;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+        background-color: #c82333;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-center">Edit Post/Note</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" value="{{ post['title'] }}" required placeholder="Enter the title of your post/note" title="Title of your post or note" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea name="content" id="content" required placeholder="Write your note or post content here" title="Content of your post or note" rows="10" class="form-control">{{ post['content'] }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="tags">Tags:</label>
+            <input type="text" name="tags" id="tags" value="{{ post['tags'] }}" placeholder="Enter tags (comma-separated)" title="Tags for categorizing your post/note" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="current-image">Current Image:</label>
+            {% if post['image_path'] %}
+                {% set image_path = post['image_path'] %}
+                {% if image_path.startswith('uploads/') %}
+                    {% set image_path = image_path %}
+                {% else %}
+                    {% set image_path = 'uploads/' ~ image_path %}
+                {% endif %}
+                <img src="{{ url_for('static', filename=image_path) }}" alt="Current Image" class="image-preview">
+            {% else %}
+                <p>No image uploaded.</p>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="image">Upload New Image (Optional):</label>
+            <input type="file" name="image" id="image" class="form-control" accept="image/*" title="Upload a new image for your post/note (optional)">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Update</button>
+    </form>
+    
+    <div class="footer">
+        <a href="{{ url_for('index') }}" class="btn-secondary btn-block mt-3">Cancel</a>
+    </div>
+</div>
+{% endblock %}
